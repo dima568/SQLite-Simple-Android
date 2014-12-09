@@ -34,7 +34,7 @@ public class SQLiteSimple {
 
     private SQLiteSimpleHelper sqLiteSimpleHelper;
     private SimplePreferencesUtil sharedPreferencesUtil;
-    private String sharedPreferencesPlace = SimpleConstants.SHARED_LOCAL_PREFERENCES;
+    private String sharedPreferencesPlace = SimplePreferencesUtil.LOCAL_PREFERENCES;
     private int databaseVersion = SimpleConstants.FIRST_DATABASE_VERSION;
     private boolean isAddedSQLDivider;
 
@@ -76,9 +76,9 @@ public class SQLiteSimple {
 
     private void commit(List<String> tables, List<String> sqlQueries) {
         sharedPreferencesUtil.putList
-                (String.format(SimpleConstants.SHARED_DATABASE_TABLES, sharedPreferencesPlace), tables);
+                (String.format(SimplePreferencesUtil.DATABASE_TABLES, sharedPreferencesPlace), tables);
         sharedPreferencesUtil.putList
-                (String.format(SimpleConstants.SHARED_DATABASE_QUERIES, sharedPreferencesPlace), sqlQueries);
+                (String.format(SimplePreferencesUtil.DATABASE_QUERIES, sharedPreferencesPlace), sqlQueries);
         sharedPreferencesUtil.commit();
     }
 
@@ -100,9 +100,9 @@ public class SQLiteSimple {
 
     public void create(Class<?>... classes) {
         List<String> savedTables = sharedPreferencesUtil.
-                getList(String.format(SimpleConstants.SHARED_DATABASE_TABLES, sharedPreferencesPlace));
+                getList(String.format(SimplePreferencesUtil.DATABASE_TABLES, sharedPreferencesPlace));
         List<String> savedSQLQueries = sharedPreferencesUtil.
-                getList(String.format(SimpleConstants.SHARED_DATABASE_QUERIES, sharedPreferencesPlace));
+                getList(String.format(SimplePreferencesUtil.DATABASE_QUERIES, sharedPreferencesPlace));
 
         sharedPreferencesUtil.clearAllPreferences(sharedPreferencesPlace, databaseVersion);
 
@@ -280,8 +280,7 @@ public class SQLiteSimple {
             for (int i = 0; i < tables.size(); i++) {
 
                 String table = tables.get(i);
-                for (String savedSqlQuery : savedSqlQueries) {
-
+                for (String savedSqlQuery : savedSqlQueries)
                     if (savedSqlQuery.contains(table)) {
 
                         List<String> savedColumns = Arrays.asList(savedSqlQueries.get(i).
@@ -309,7 +308,6 @@ public class SQLiteSimple {
 
                         isAddNewColumn = true;
                     }
-                }
             }
 
             return isAddNewColumn;

@@ -34,18 +34,6 @@ public class SimpleConstants {
             "CREATE VIRTUAL TABLE %s USING fts3(%s, %s, tokenize = porter);";
     public static final String FTS_DROP_VIRTUAL_TABLE = "DROP TABLE IF EXISTS %s";
 
-    // Shared preferences
-    public static final String SHARED_PREFERENCES_APPLICATION = "SQLiteSimpleDatabaseApplication";
-    public static final String SHARED_PREFERENCES_DATABASE = "SQLiteSimpleDatabaseHelper";
-    public static final String SHARED_DATABASE_TABLES = "SQLiteSimpleDatabaseTables_%s";
-    public static final String SHARED_DATABASE_QUERIES = "SQLiteSimpleDatabaseQueries_%s";
-    public static final String SHARED_DATABASE_VERSION = "SQLiteSimpleDatabaseVersion_%s";
-    public static final String SHARED_DATABASE_VIRTUAL_TABLE_CREATED = "SQLiteSimpleDatabaseVirtualTableCreated";
-    public static final String SHARED_PREFERENCES_LIST = "List_%s_%s";
-    public static final String SHARED_PREFERENCES_INDEX = "%s_Index";
-    public static final String SHARED_LOCAL_PREFERENCES = "LOCAL";
-    public static final String SHARED_IS_FIRST_APPLICATION_START = "SHARED_IS_FIRST_APPLICATION_START";
-
     // SQL
     public static final String AUTOINCREMENT = "AUTOINCREMENT";
     public static final String PRIMARY_KEY = "PRIMARY KEY";

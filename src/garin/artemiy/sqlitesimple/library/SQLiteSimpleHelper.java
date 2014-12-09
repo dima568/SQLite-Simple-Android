@@ -58,7 +58,7 @@ public class SQLiteSimpleHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         List<String> sqlQueries = sharedPreferencesUtil.getList(
-                String.format(SimpleConstants.SHARED_DATABASE_QUERIES, sharedPreferencesPlace));
+                String.format(SimplePreferencesUtil.DATABASE_QUERIES, sharedPreferencesPlace));
         if (sqlQueries != null) for (String sqlQuery : sqlQueries)
             sqLiteDatabase.execSQL(sqlQuery);
     }
@@ -66,7 +66,7 @@ public class SQLiteSimpleHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
         List<String> tables = sharedPreferencesUtil.getList(
-                String.format(SimpleConstants.SHARED_DATABASE_TABLES, SimpleConstants.SHARED_LOCAL_PREFERENCES));
+                String.format(SimplePreferencesUtil.DATABASE_TABLES, SimplePreferencesUtil.LOCAL_PREFERENCES));
         if (tables != null) for (String table : tables)
             sqLiteDatabase.execSQL(String.format(SimpleConstants.FORMAT_TWINS,
                     SimpleConstants.SQL_DROP_TABLE_IF_EXISTS, table));

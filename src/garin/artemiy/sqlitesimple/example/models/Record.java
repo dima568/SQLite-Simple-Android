@@ -8,6 +8,7 @@ import java.util.Date;
  * author: Artemiy Garin
  * date: 13.12.12
  */
+@SuppressWarnings("UnusedDeclaration")
 public class Record {
 
     public transient static final String COLUMN_RECORD_TEXT = "recordText";

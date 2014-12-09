@@ -47,8 +47,7 @@ public class SimpleDatabaseUtil {
         Column annotationColumn = field.getAnnotation(Column.class);
         String column = null;
         if (annotationColumn != null)
-            if (annotationColumn.name().equals(SimpleConstants.EMPTY))
-                column = field.getName();
+            if (annotationColumn.name().equals(SimpleConstants.EMPTY)) column = field.getName();
             else column = annotationColumn.name();
 
         return column;
@@ -136,11 +135,11 @@ public class SimpleDatabaseUtil {
 
     @SuppressWarnings("unused")
     public static boolean isFirstApplicationStart(Context context) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(SimpleConstants.SHARED_PREFERENCES_APPLICATION,
-                Context.MODE_PRIVATE);
-        if (sharedPreferences.getBoolean(SimpleConstants.SHARED_IS_FIRST_APPLICATION_START, true)) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences
+                (SimplePreferencesUtil.PREFERENCES_APPLICATION, Context.MODE_PRIVATE);
+        if (sharedPreferences.getBoolean(SimplePreferencesUtil.IS_FIRST_APPLICATION_START, true)) {
             SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
-            sharedPreferencesEditor.putBoolean(SimpleConstants.SHARED_IS_FIRST_APPLICATION_START, false);
+            sharedPreferencesEditor.putBoolean(SimplePreferencesUtil.IS_FIRST_APPLICATION_START, false);
             sharedPreferencesEditor.commit();
             return true;
         } else return false;
@@ -148,8 +147,8 @@ public class SimpleDatabaseUtil {
 
     @SuppressWarnings("unused")
     public static boolean isFirstStartOnAppVersion(Context context, int appVersionCode) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(SimpleConstants.SHARED_PREFERENCES_APPLICATION,
-                Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences
+                (SimplePreferencesUtil.PREFERENCES_APPLICATION, Context.MODE_PRIVATE);
         if (sharedPreferences.getBoolean(
                 String.format(SimpleConstants.FORMAT_SHARED_IS_FIRST_APPLICATION_START, appVersionCode), true)) {
             SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();

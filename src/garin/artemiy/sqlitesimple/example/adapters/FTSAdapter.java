@@ -19,12 +19,10 @@ import garin.artemiy.sqlitesimple.library.model.FTSModel;
 @SuppressWarnings("CanBeFinal")
 public class FTSAdapter extends ArrayAdapter<FTSModel> {
 
-    private Context context;
     private RecordsDAO recordsDAO;
 
     public FTSAdapter(Context context, RecordsDAO recordsDAO) {
         super(context, R.layout.item_record);
-        this.context = context;
         this.recordsDAO = recordsDAO;
     }
 
@@ -32,7 +30,7 @@ public class FTSAdapter extends ArrayAdapter<FTSModel> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null)
-            convertView = LayoutInflater.from(context).inflate(R.layout.item_record, null);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_record, null);
 
         FTSModel ftsModel = getItem(position);
         TextView recordText = (TextView) convertView.findViewById(R.id.recordTextView);

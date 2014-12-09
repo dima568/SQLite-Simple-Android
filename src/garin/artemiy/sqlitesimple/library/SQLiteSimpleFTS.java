@@ -46,8 +46,8 @@ public class SQLiteSimpleFTS {
     public SQLiteSimpleFTS(Context context, boolean useTablesCategory) {
         this.useTablesCategory = useTablesCategory;
 
-        SQLiteSimpleHelper simpleHelper = new SQLiteSimpleHelper(context, SimpleConstants.SHARED_LOCAL_PREFERENCES,
-                new SimplePreferencesUtil(context).getDatabaseVersion(SimpleConstants.SHARED_LOCAL_PREFERENCES), null, true);
+        SQLiteSimpleHelper simpleHelper = new SQLiteSimpleHelper(context, SimplePreferencesUtil.LOCAL_PREFERENCES,
+                new SimplePreferencesUtil(context).getDatabaseVersion(SimplePreferencesUtil.LOCAL_PREFERENCES), null, true);
 
         if (database == null || !database.isOpen()) database = simpleHelper.getWritableDatabase();
         tableName = SimpleDatabaseUtil.getFTSTableName(context);
@@ -105,10 +105,8 @@ public class SQLiteSimpleFTS {
 
         if (incomingQuery.length() >= SimpleConstants.FTS_QUERY_MINIMUM_LENGTH) {
             String order;
-            if (resultDesc)
-                order = SimpleConstants.DESC;
-            else
-                order = SimpleConstants.ASC;
+            if (resultDesc) order = SimpleConstants.DESC;
+            else order = SimpleConstants.ASC;
 
             String format = String.format(SimpleConstants.FTS_SQL_FORMAT, tableName, tableName, COLUMN_ID, order);
             Cursor cursor = database.rawQuery(format, new String[]{String.format(MATCH_FORMAT, COLUMN_DATA, incomingQuery)});

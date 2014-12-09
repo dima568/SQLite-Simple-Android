@@ -69,9 +69,7 @@ public class MainActivity extends Activity {
     private void updateFTSAdapter() {
         if (searchWord != null) {
             ftsAdapter.clear();
-
             for (FTSModel ftsModel : simpleFTS.search(searchWord, false)) ftsAdapter.add(ftsModel);
-
             ftsAdapter.notifyDataSetChanged();
         }
     }

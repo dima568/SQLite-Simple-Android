@@ -17,18 +17,15 @@ import garin.artemiy.sqlitesimple.example.models.Record;
 @SuppressWarnings("CanBeFinal")
 public class RecordAdapter extends ArrayAdapter<Record> {
 
-    private Context context;
-
     public RecordAdapter(Context context) {
         super(context, R.layout.item_record);
-        this.context = context;
     }
 
     @SuppressLint("InflateParams")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null)
-            convertView = LayoutInflater.from(context).inflate(R.layout.item_record, null);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_record, null);
 
         Record record = getItem(position);
         TextView recordText = (TextView) convertView.findViewById(R.id.recordTextView);

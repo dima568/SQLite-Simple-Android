@@ -46,8 +46,9 @@ public abstract class SQLiteSimpleDAO<T> {
     private static SQLiteDatabase localDatabase;
 
     public SQLiteSimpleDAO(Class<T> tClass, Context context) {
-        simpleHelper = new SQLiteSimpleHelper(context, SimpleConstants.SHARED_LOCAL_PREFERENCES,
-                new SimplePreferencesUtil(context).getDatabaseVersion(SimpleConstants.SHARED_LOCAL_PREFERENCES), null, false);
+        simpleHelper = new SQLiteSimpleHelper(context, SimplePreferencesUtil.LOCAL_PREFERENCES,
+                new SimplePreferencesUtil(context).getDatabaseVersion
+                        (SimplePreferencesUtil.LOCAL_PREFERENCES), null, false);
         init(tClass);
     }
 
@@ -88,11 +89,8 @@ public abstract class SQLiteSimpleDAO<T> {
 
     private String getPrimaryKeyColumnName() {
 
-        for (Field field : tClass.getDeclaredFields()) {
-
-            Column fieldEntityAnnotation = field.getAnnotation(Column.class);
-
-            if (fieldEntityAnnotation != null) {
+        for (Field field : tClass.getDeclaredFields())
+            if (field.getAnnotation(Column.class) != null) {
                 String columnName = SimpleDatabaseUtil.getColumnName(field);
 
                 if (columnName != null) {
@@ -101,7 +99,6 @@ public abstract class SQLiteSimpleDAO<T> {
                     if (annotationColumn.isPrimaryKey()) return columnName;
                 }
             }
-        }
 
         return SimpleConstants.ID_COLUMN;
 
@@ -115,10 +112,8 @@ public abstract class SQLiteSimpleDAO<T> {
             Column fieldEntityAnnotation = field.getAnnotation(Column.class);
             if (fieldEntityAnnotation != null) {
                 String columnName = SimpleDatabaseUtil.getColumnName(field);
-                if (columnName != null)
-                    columnsList.add(columnName);
-                if (fieldEntityAnnotation.isPrimaryKey())
-                    isHaveAnyKey = true;
+                if (columnName != null) columnsList.add(columnName);
+                if (fieldEntityAnnotation.isPrimaryKey()) isHaveAnyKey = true;
             }
         }
 
@@ -130,11 +125,9 @@ public abstract class SQLiteSimpleDAO<T> {
 
     private void bindObject(T newTObject, Cursor cursor) throws NoSuchFieldException, IllegalAccessException {
         for (Field field : tClass.getDeclaredFields()) {
-            if (!field.isAccessible())
-                field.setAccessible(true); // for private variables
+            if (!field.isAccessible()) field.setAccessible(true); // for private variables
             Column fieldEntityAnnotation = field.getAnnotation(Column.class);
-            if (fieldEntityAnnotation != null)
-                field.set(newTObject, getValueFromCursor(cursor, field));
+            if (fieldEntityAnnotation != null) field.set(newTObject, getValueFromCursor(cursor, field));
         }
     }
 
@@ -241,9 +234,7 @@ public abstract class SQLiteSimpleDAO<T> {
                 return null;
             }
 
-        } else {
-            return null;
-        }
+        } else return null;
     }
 
     @SuppressWarnings("unused")
@@ -362,8 +353,7 @@ public abstract class SQLiteSimpleDAO<T> {
 
         Cursor cursor = selectCursorFromTable(String.format(SimpleConstants.FORMAT_COLUMNS_COMMA,
                         firstColumnName, secondColumnName),
-                new String[]{firstColumnValue, secondColumnValue}, null, null, null
-        );
+                new String[]{firstColumnValue, secondColumnValue}, null, null, null);
 
         if (cursor.getCount() == 0) result = create(object);
 
@@ -412,7 +402,6 @@ public abstract class SQLiteSimpleDAO<T> {
         } finally {
             cursor.close();
         }
-
     }
 
     @SuppressWarnings("unused")
