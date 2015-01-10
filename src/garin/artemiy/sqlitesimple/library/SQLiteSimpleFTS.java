@@ -8,7 +8,7 @@ import android.text.TextUtils;
 import garin.artemiy.sqlitesimple.library.model.FTSModel;
 import garin.artemiy.sqlitesimple.library.util.SimpleConstants;
 import garin.artemiy.sqlitesimple.library.util.SimpleDatabaseUtil;
-import garin.artemiy.sqlitesimple.library.util.SimplePreferencesUtil;
+import garin.artemiy.sqlitesimple.library.util.SimplePreferencesHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,14 +40,14 @@ public class SQLiteSimpleFTS {
     private static SQLiteDatabase database = null;
     private boolean useTablesCategory;
     private String tableName;
-    private SimplePreferencesUtil preferencesUtil;
+    private SimplePreferencesHelper preferencesUtil;
 
     @SuppressWarnings("unused")
     public SQLiteSimpleFTS(Context context, boolean useTablesCategory) {
         this.useTablesCategory = useTablesCategory;
 
-        SQLiteSimpleHelper simpleHelper = new SQLiteSimpleHelper(context, SimplePreferencesUtil.LOCAL_PREFERENCES,
-                new SimplePreferencesUtil(context).getDatabaseVersion(SimplePreferencesUtil.LOCAL_PREFERENCES), null, true);
+        SQLiteSimpleHelper simpleHelper = new SQLiteSimpleHelper(context, SimplePreferencesHelper.LOCAL_PREFERENCES,
+                new SimplePreferencesHelper(context).getDatabaseVersion(SimplePreferencesHelper.LOCAL_PREFERENCES), null, true);
 
         if (database == null || !database.isOpen()) database = simpleHelper.getWritableDatabase();
         tableName = SimpleDatabaseUtil.getFTSTableName(context);
@@ -63,7 +63,7 @@ public class SQLiteSimpleFTS {
     }
 
     public void createTableIfNotExist(Context context) {
-        preferencesUtil = new SimplePreferencesUtil(context);
+        preferencesUtil = new SimplePreferencesHelper(context);
         if (!preferencesUtil.isVirtualTableCreated()) {
 
             String createVirtualFTSTable;

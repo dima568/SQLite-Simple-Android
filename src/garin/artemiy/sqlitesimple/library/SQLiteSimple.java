@@ -6,7 +6,7 @@ import garin.artemiy.sqlitesimple.library.annotations.Column;
 import garin.artemiy.sqlitesimple.library.util.ColumnType;
 import garin.artemiy.sqlitesimple.library.util.SimpleConstants;
 import garin.artemiy.sqlitesimple.library.util.SimpleDatabaseUtil;
-import garin.artemiy.sqlitesimple.library.util.SimplePreferencesUtil;
+import garin.artemiy.sqlitesimple.library.util.SimplePreferencesHelper;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -33,8 +33,8 @@ import java.util.List;
 public class SQLiteSimple {
 
     private SQLiteSimpleHelper sqLiteSimpleHelper;
-    private SimplePreferencesUtil sharedPreferencesUtil;
-    private String sharedPreferencesPlace = SimplePreferencesUtil.LOCAL_PREFERENCES;
+    private SimplePreferencesHelper preferences;
+    private String sharedPreferencesPlace = SimplePreferencesHelper.LOCAL_PREFERENCES;
     private int databaseVersion = SimpleConstants.FIRST_DATABASE_VERSION;
     private boolean isAddedSQLDivider;
 
@@ -63,23 +63,21 @@ public class SQLiteSimple {
     }
 
     private void init(Context context) {
-        this.sharedPreferencesUtil = new SimplePreferencesUtil(context);
+        this.preferences = new SimplePreferencesHelper(context);
         commitDatabaseVersion();
     }
 
     private void commitDatabaseVersion() {
-        if (databaseVersion > sharedPreferencesUtil.getDatabaseVersion(sharedPreferencesPlace)) {
-            sharedPreferencesUtil.putDatabaseVersion(databaseVersion, sharedPreferencesPlace);
-            sharedPreferencesUtil.commit();
+        if (databaseVersion > preferences.getDatabaseVersion(sharedPreferencesPlace)) {
+            preferences.putDatabaseVersion(databaseVersion, sharedPreferencesPlace);
+            preferences.commit();
         }
     }
 
     private void commit(List<String> tables, List<String> sqlQueries) {
-        sharedPreferencesUtil.putList
-                (String.format(SimplePreferencesUtil.DATABASE_TABLES, sharedPreferencesPlace), tables);
-        sharedPreferencesUtil.putList
-                (String.format(SimplePreferencesUtil.DATABASE_QUERIES, sharedPreferencesPlace), sqlQueries);
-        sharedPreferencesUtil.commit();
+        preferences.putList(String.format(SimplePreferencesHelper.DATABASE_TABLES, sharedPreferencesPlace), tables);
+        preferences.putList(String.format(SimplePreferencesHelper.DATABASE_QUERIES, sharedPreferencesPlace), sqlQueries);
+        preferences.commit();
     }
 
     private void checkingCommit(List<String> tables, List<String> sqlQueries, boolean newDatabaseVersion) {
@@ -99,12 +97,12 @@ public class SQLiteSimple {
     }
 
     public void create(Class<?>... classes) {
-        List<String> savedTables = sharedPreferencesUtil.
-                getList(String.format(SimplePreferencesUtil.DATABASE_TABLES, sharedPreferencesPlace));
-        List<String> savedSQLQueries = sharedPreferencesUtil.
-                getList(String.format(SimplePreferencesUtil.DATABASE_QUERIES, sharedPreferencesPlace));
+        List<String> savedTables = preferences.
+                getList(String.format(SimplePreferencesHelper.DATABASE_TABLES, sharedPreferencesPlace));
+        List<String> savedSQLQueries = preferences.
+                getList(String.format(SimplePreferencesHelper.DATABASE_QUERIES, sharedPreferencesPlace));
 
-        sharedPreferencesUtil.clearAllPreferences(sharedPreferencesPlace, databaseVersion);
+        preferences.clearAllPreferences(sharedPreferencesPlace, databaseVersion);
 
         List<String> tables = new ArrayList<String>();
         List<String> sqlQueries = new ArrayList<String>();
@@ -114,7 +112,7 @@ public class SQLiteSimple {
         boolean newDatabaseVersion = false;
         boolean isRebasedTables = false;
 
-        if (databaseVersion > sharedPreferencesUtil.getDatabaseVersion(sharedPreferencesPlace))
+        if (databaseVersion > preferences.getDatabaseVersion(sharedPreferencesPlace))
             newDatabaseVersion = true;
 
         if (!newDatabaseVersion) {
@@ -235,15 +233,14 @@ public class SQLiteSimple {
         sqlQueryBuilder.append(String.format(SimpleConstants.FORMAT_BRACKETS, primaryKeysBuilder.toString()));
     }
 
-    // Also delete extra tables
     private boolean rebaseTablesIfNeed(List<String> savedTables, List<String> tables,
                                        List<String> sqlQueries, List<String> savedSQLQueries) {
 
-        List<String> extraTables = new ArrayList<String>(savedTables); // possible extra tables
+        List<String> extraTables = new ArrayList<String>(savedTables);
         extraTables.removeAll(tables);
 
-        if (extraTables.size() != 0) { // drop tables
-            List<String> extraSqlQueries = new ArrayList<String>(savedSQLQueries); // extra SQL queries
+        if (extraTables.size() != 0) {
+            List<String> extraSqlQueries = new ArrayList<String>(savedSQLQueries);
             extraSqlQueries.removeAll(sqlQueries);
 
             SQLiteDatabase database = sqLiteSimpleHelper.getWritableDatabase();
@@ -257,11 +254,11 @@ public class SQLiteSimple {
             return true;
         }
 
-        List<String> tablesToCreate = new ArrayList<String>(tables); // possible tables to need create
+        List<String> tablesToCreate = new ArrayList<String>(tables);
         tablesToCreate.removeAll(savedTables);
 
         if (tablesToCreate.size() != 0) {
-            List<String> sqlQueriesToCreate = new ArrayList<String>(sqlQueries); // extra SQL queries
+            List<String> sqlQueriesToCreate = new ArrayList<String>(sqlQueries);
             sqlQueriesToCreate.removeAll(savedSQLQueries);
 
             SQLiteDatabase database = sqLiteSimpleHelper.getWritableDatabase();
@@ -275,7 +272,6 @@ public class SQLiteSimple {
 
     private boolean addNewColumnsIfNeed(List<String> tables, List<String> sqlQueries, List<String> savedSqlQueries) {
         try {
-            // if change name of column or add new column, or delete
             boolean isAddNewColumn = false;
             for (int i = 0; i < tables.size(); i++) {
 

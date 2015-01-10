@@ -136,10 +136,10 @@ public class SimpleDatabaseUtil {
     @SuppressWarnings("unused")
     public static boolean isFirstApplicationStart(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences
-                (SimplePreferencesUtil.PREFERENCES_APPLICATION, Context.MODE_PRIVATE);
-        if (sharedPreferences.getBoolean(SimplePreferencesUtil.IS_FIRST_APPLICATION_START, true)) {
+                (SimplePreferencesHelper.PREFERENCES_APPLICATION, Context.MODE_PRIVATE);
+        if (sharedPreferences.getBoolean(SimplePreferencesHelper.IS_FIRST_APPLICATION_START, true)) {
             SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
-            sharedPreferencesEditor.putBoolean(SimplePreferencesUtil.IS_FIRST_APPLICATION_START, false);
+            sharedPreferencesEditor.putBoolean(SimplePreferencesHelper.IS_FIRST_APPLICATION_START, false);
             sharedPreferencesEditor.commit();
             return true;
         } else return false;
@@ -148,7 +148,7 @@ public class SimpleDatabaseUtil {
     @SuppressWarnings("unused")
     public static boolean isFirstStartOnAppVersion(Context context, int appVersionCode) {
         SharedPreferences sharedPreferences = context.getSharedPreferences
-                (SimplePreferencesUtil.PREFERENCES_APPLICATION, Context.MODE_PRIVATE);
+                (SimplePreferencesHelper.PREFERENCES_APPLICATION, Context.MODE_PRIVATE);
         if (sharedPreferences.getBoolean(
                 String.format(SimpleConstants.FORMAT_SHARED_IS_FIRST_APPLICATION_START, appVersionCode), true)) {
             SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();

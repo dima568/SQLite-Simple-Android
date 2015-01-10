@@ -24,9 +24,9 @@ import java.util.List;
  * limitations under the License.
  */
 @SuppressWarnings("CanBeFinal")
-public class SimplePreferencesUtil {
+public class SimplePreferencesHelper {
 
-    private SharedPreferences.Editor sharedPreferencesEditor;
+    private SharedPreferences.Editor preferencesEditor;
     private SharedPreferences sharedPreferences;
 
     public static final String PREFERENCES_APPLICATION = "SQLiteSimpleDatabaseApplication";
@@ -42,25 +42,25 @@ public class SimplePreferencesUtil {
     private static final String PREFERENCES_INDEX = "%s_Index";
 
     @SuppressLint("CommitPrefEdits")
-    public SimplePreferencesUtil(Context context) {
+    public SimplePreferencesHelper(Context context) {
         sharedPreferences = context.getSharedPreferences(PREFERENCES_DATABASE,
                 Context.MODE_PRIVATE);
-        sharedPreferencesEditor = sharedPreferences.edit();
+        preferencesEditor = sharedPreferences.edit();
     }
 
     public void clearAllPreferences(String place, int databaseVersion) {
         boolean isFTSTableCreated = isVirtualTableCreated();
 
-        sharedPreferencesEditor.remove(String.format(DATABASE_QUERIES, place));
-        sharedPreferencesEditor.remove(String.format(PREFERENCES_INDEX, String.format(DATABASE_QUERIES, place)));
-        sharedPreferencesEditor.remove(String.format(DATABASE_TABLES, place));
-        sharedPreferencesEditor.remove(String.format(PREFERENCES_INDEX, String.format(DATABASE_TABLES, place)));
+        preferencesEditor.remove(String.format(DATABASE_QUERIES, place));
+        preferencesEditor.remove(String.format(PREFERENCES_INDEX, String.format(DATABASE_QUERIES, place)));
+        preferencesEditor.remove(String.format(DATABASE_TABLES, place));
+        preferencesEditor.remove(String.format(PREFERENCES_INDEX, String.format(DATABASE_TABLES, place)));
 
         putDatabaseVersion(databaseVersion, place);
 
         if (isFTSTableCreated) setVirtualTableCreated();
 
-        sharedPreferencesEditor.commit();
+        preferencesEditor.commit();
     }
 
 
@@ -68,22 +68,18 @@ public class SimplePreferencesUtil {
         return getCurrentIndex(place) + 1;
     }
 
-    private void putCurrentIndex(String place, int index) {
-        sharedPreferencesEditor.putInt(String.format(PREFERENCES_INDEX, place), index);
-        sharedPreferencesEditor.commit();
-    }
-
     private int getCurrentIndex(String place) {
         return sharedPreferences.getInt(String.format(PREFERENCES_INDEX, place), 1);
     }
 
     public void putList(String place, List<String> entityList) {
+        int index = getNextIndex(place);
         for (String entity : entityList) {
-            int index = getNextIndex(place);
-            sharedPreferencesEditor.putString(
-                    String.format(PREFERENCES_LIST, place, index), entity);
-            putCurrentIndex(place, index);
+            preferencesEditor.putString(String.format(PREFERENCES_LIST, place, index), entity);
+            index++;
         }
+        preferencesEditor.putInt(String.format(PREFERENCES_INDEX, place), index);
+        preferencesEditor.commit();
     }
 
     public List<String> getList(String place) {
@@ -98,11 +94,11 @@ public class SimplePreferencesUtil {
     }
 
     public void commit() {
-        sharedPreferencesEditor.commit();
+        preferencesEditor.commit();
     }
 
     public void putDatabaseVersion(int databaseVersion, String sharedPreferencesPlace) {
-        sharedPreferencesEditor.putInt(String.format(DATABASE_VERSION,
+        preferencesEditor.putInt(String.format(DATABASE_VERSION,
                 sharedPreferencesPlace), databaseVersion);
     }
 
@@ -116,11 +112,11 @@ public class SimplePreferencesUtil {
     }
 
     public void setVirtualTableCreated() {
-        sharedPreferencesEditor.putBoolean(DATABASE_VIRTUAL_TABLE_CREATED, true);
+        preferencesEditor.putBoolean(DATABASE_VIRTUAL_TABLE_CREATED, true);
     }
 
     public void setVirtualTableDropped() {
-        sharedPreferencesEditor.putBoolean(DATABASE_VIRTUAL_TABLE_CREATED, false);
+        preferencesEditor.putBoolean(DATABASE_VIRTUAL_TABLE_CREATED, false);
     }
 
 }

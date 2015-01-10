@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import garin.artemiy.sqlitesimple.library.util.SimpleConstants;
 import garin.artemiy.sqlitesimple.library.util.SimpleDatabaseUtil;
-import garin.artemiy.sqlitesimple.library.util.SimplePreferencesUtil;
+import garin.artemiy.sqlitesimple.library.util.SimplePreferencesHelper;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -34,7 +34,7 @@ public class SQLiteSimpleHelper extends SQLiteOpenHelper {
 
     private String assetsDatabaseName;
     private Context context;
-    private SimplePreferencesUtil sharedPreferencesUtil;
+    private SimplePreferencesHelper sharedPreferencesUtil;
     private String sharedPreferencesPlace;
     private static final Object writableObjectLock = new Object();
     private static final Object readableObjectLock = new Object();
@@ -52,13 +52,13 @@ public class SQLiteSimpleHelper extends SQLiteOpenHelper {
         this.assetsDatabaseName = assetsDatabaseName;
         this.context = context;
         this.sharedPreferencesPlace = sharedPreferencesPlace;
-        sharedPreferencesUtil = new SimplePreferencesUtil(context);
+        sharedPreferencesUtil = new SimplePreferencesHelper(context);
     }
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         List<String> sqlQueries = sharedPreferencesUtil.getList(
-                String.format(SimplePreferencesUtil.DATABASE_QUERIES, sharedPreferencesPlace));
+                String.format(SimplePreferencesHelper.DATABASE_QUERIES, sharedPreferencesPlace));
         if (sqlQueries != null) for (String sqlQuery : sqlQueries)
             sqLiteDatabase.execSQL(sqlQuery);
     }
@@ -66,7 +66,7 @@ public class SQLiteSimpleHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
         List<String> tables = sharedPreferencesUtil.getList(
-                String.format(SimplePreferencesUtil.DATABASE_TABLES, SimplePreferencesUtil.LOCAL_PREFERENCES));
+                String.format(SimplePreferencesHelper.DATABASE_TABLES, SimplePreferencesHelper.LOCAL_PREFERENCES));
         if (tables != null) for (String table : tables)
             sqLiteDatabase.execSQL(String.format(SimpleConstants.FORMAT_TWINS,
                     SimpleConstants.SQL_DROP_TABLE_IF_EXISTS, table));

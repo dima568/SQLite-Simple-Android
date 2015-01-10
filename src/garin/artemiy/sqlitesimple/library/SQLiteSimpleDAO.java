@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import garin.artemiy.sqlitesimple.library.annotations.Column;
 import garin.artemiy.sqlitesimple.library.util.SimpleConstants;
 import garin.artemiy.sqlitesimple.library.util.SimpleDatabaseUtil;
-import garin.artemiy.sqlitesimple.library.util.SimplePreferencesUtil;
+import garin.artemiy.sqlitesimple.library.util.SimplePreferencesHelper;
 
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
@@ -46,15 +46,15 @@ public abstract class SQLiteSimpleDAO<T> {
     private static SQLiteDatabase localDatabase;
 
     public SQLiteSimpleDAO(Class<T> tClass, Context context) {
-        simpleHelper = new SQLiteSimpleHelper(context, SimplePreferencesUtil.LOCAL_PREFERENCES,
-                new SimplePreferencesUtil(context).getDatabaseVersion
-                        (SimplePreferencesUtil.LOCAL_PREFERENCES), null, false);
+        simpleHelper = new SQLiteSimpleHelper(context, SimplePreferencesHelper.LOCAL_PREFERENCES,
+                new SimplePreferencesHelper(context).getDatabaseVersion
+                        (SimplePreferencesHelper.LOCAL_PREFERENCES), null, false);
         init(tClass);
     }
 
     public SQLiteSimpleDAO(Class<T> tClass, Context context, String assetsDatabaseName) {
         simpleHelper = new SQLiteSimpleHelper(context, assetsDatabaseName,
-                new SimplePreferencesUtil(context).getDatabaseVersion(assetsDatabaseName), assetsDatabaseName, false);
+                new SimplePreferencesHelper(context).getDatabaseVersion(assetsDatabaseName), assetsDatabaseName, false);
         this.assetsDatabaseName = assetsDatabaseName;
         init(tClass);
     }

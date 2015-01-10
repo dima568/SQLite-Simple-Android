@@ -21,7 +21,7 @@ public class LibraryTestCase extends AndroidTestCase {
     /**
      * Speed test settings
      */
-    private static final int RECORDS_COUNT = 500;
+    private static final int RECORDS_COUNT = 1000;
 
     public void testFunctional() {
         Log.d(TAG, "Functional tests begin");
