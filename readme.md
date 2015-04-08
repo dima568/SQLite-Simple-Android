@@ -1,4 +1,4 @@
-<h3>Attention</h3> This project no longer supported, please use newest ORM, for example: https://github.com/Raizlabs/DBFlow
+<h3>Attention</h3> This project no longer supported, please use newest ORM library, for example: https://github.com/Raizlabs/DBFlow, https://github.com/pardom/ActiveAndroid, https://github.com/SimonVT/schematic
 
  
  
