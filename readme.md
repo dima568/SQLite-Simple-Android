@@ -1,4 +1,4 @@
-<h3>Attention</h3> This project no longer supported, please use newest ORM library, for example: <a href="https://realm.io/">Realm</a>, <a href="http://greendao-orm.com/">greenDAO</a>, <a href="http://ormlite.com/">OrmLite</a>, <a href="https://github.com/Raizlabs/DBFlow">DBFlow</a>, <a href="https://github.com/pardom/ActiveAndroid">ActiveAndroid</a>, <a href="https://github.com/SimonVT/schematic">schematic</a>
+<h2>Warning</h2> This project no longer supported, please use newest ORM library, for example: <a href="https://realm.io/">Realm</a>, <a href="http://greendao-orm.com/">greenDAO</a>, <a href="http://ormlite.com/">OrmLite</a>, <a href="https://github.com/Raizlabs/DBFlow">DBFlow</a>, <a href="https://github.com/pardom/ActiveAndroid">ActiveAndroid</a>, <a href="https://github.com/SimonVT/schematic">schematic</a>
 
  
  
